@@ -21,6 +21,10 @@ mingw-crt (bootstrap=0)
 mingw-winpthreads
 mingw-headers (bundle_dummy_pthread_headers=0)
 mingw-gcc (bootstrap=0)
+mingw-expat
+mingw-zlib
+mingw-gmp
+mingw-win-iconv
 mingw-gdb
 
 # Tier-2
