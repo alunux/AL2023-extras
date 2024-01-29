@@ -1,0 +1,26 @@
+From 5ccb4f14b0c620bf0271b00cb47770bca4c2439c Mon Sep 17 00:00:00 2001
+From: ndp-opendap <ndp@opendap.org>
+Date: Fri, 8 Jul 2022 08:23:02 -0700
+Subject: [PATCH] Fixing type issue in HTTPCache.cc
+
+---
+ HTTPCache.cc | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/HTTPCache.cc b/HTTPCache.cc
+index 56e912be..f2b34214 100644
+--- a/HTTPCache.cc
++++ b/HTTPCache.cc
+@@ -1028,10 +1028,10 @@ HTTPCache::read_metadata(const string &cachename, vector<string> &headers)
+                           "Could not open named cache entry meta data file.");
+     }
+ 
+-    const unsigned long line_buf_len = 1024;
++    const size_t line_buf_len = 1024;
+     char line[line_buf_len];
+     while (!feof(md) && fgets(line, line_buf_len, md)) {
+-        line[min(line_buf_len, strnlen(line, line_buf_len))-1] = '\0'; // erase newline
++        line[std::min(line_buf_len, strnlen(line, line_buf_len))-1] = '\0'; // erase newline
+         headers.push_back(string(line));
+     }
+ 

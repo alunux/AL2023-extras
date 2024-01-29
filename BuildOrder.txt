@@ -1,0 +1,44 @@
+# Tier-0
+blosc
+CharLS
+arpack
+libaec
+cfitsio
+minizip-ng
+libdap
+libgta
+ogdi
+xerces-c
+
+# Tier-1
+mingw-filesystem (bootstrap=1)
+mingw-binutils
+mingw-headers (bundle_dummy_pthread_headers=1)
+mingw-w64-tools
+mingw-gcc (bootstrap=1)
+mingw-crt (bootstrap=1)
+mingw-crt (bootstrap=0)
+mingw-winpthreads
+mingw-headers (bundle_dummy_pthread_headers=0)
+mingw-gcc (bootstrap=0)
+mingw-gdb
+
+# Tier-2
+geos
+freexl
+libgeotiff
+libkml
+liblerc
+hdf
+hdf5
+
+# Tier-3
+armadillo <- hdf5
+
+netcdf <- blosc
+       <- hdf
+       <- hdf5
+
+libspatialite <- geos
+              <- freexl
+              <- proj

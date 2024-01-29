@@ -1,0 +1,16 @@
+Include <string.h> for the strcpy function.
+
+Submitted upstream: <https://github.com/libogdi/ogdi/pull/25>
+
+diff --git a/contrib/gdal/gdalbridge.c b/contrib/gdal/gdalbridge.c
+index 22e0e8cd0b7f284d..5b73c5474969adaa 100644
+--- a/contrib/gdal/gdalbridge.c
++++ b/contrib/gdal/gdalbridge.c
+@@ -71,6 +71,7 @@
+ #include "gdalbridge.h"
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <string.h>
+ 
+ #ifdef _WIN32
+ #define PATH_SEP '\\'

@@ -1,0 +1,12 @@
+diff -rupN --no-dereference mingw-w64-v11.0.0/mingw-w64-crt/intrincs/rdtsc.c mingw-w64-v11.0.0-new/mingw-w64-crt/intrincs/rdtsc.c
+--- mingw-w64-v11.0.0/mingw-w64-crt/intrincs/rdtsc.c	2023-04-27 17:12:39.000000000 +0200
++++ mingw-w64-v11.0.0-new/mingw-w64-crt/intrincs/rdtsc.c	2023-04-30 17:02:39.748082416 +0200
+@@ -15,7 +15,7 @@
+ #endif
+ 
+ #if !__has_builtin(__rdtsc)
+-unsigned __int64 __rdtsc(void)
++unsigned __int64 __rdtsc()
+ {
+ #ifdef _WIN64
+       unsigned __int64 val1, val2;
