@@ -26,6 +26,11 @@ mingw-zlib
 mingw-gmp
 mingw-win-iconv
 mingw-gdb
+mingw-libcharset
+mingw-zstd
+mingw-xz
+mingw-bzip2
+mingw-minizip
 
 # Tier-2
 geos
@@ -37,7 +42,10 @@ hdf
 hdf5
 
 # Tier-3
-armadillo <- hdf5
+armadillo 
+    <- CharLS
+    <- arpack
+    <- hdf5
 
 netcdf <- blosc
        <- hdf
