@@ -27,8 +27,17 @@ mingw-zlib
 mingw-gmp
 mingw-win-iconv
 mingw-gdb
+
+# Tier-2
+geos
+hdf
+hdf5
+netcdf
+armadillo
 mingw-pcre2
 mingw-tcl
+mingw-pdcurses
+mingw-xerces-c
 mingw-imath
 mingw-openexr
 liblerc
@@ -45,33 +54,19 @@ mingw-libcharset
 mingw-zstd
 mingw-xz
 mingw-bzip2
+mingw-sqlite
 mingw-dlfcn
 mingw-libidn2
 mingw-openssl
 mingw-libssh2
 mingw-minizip
+freexl
 mingw-gettext
 mingw-libgpg-error
 mingw-libgcrypt
 mingw-libxml2
 mingw-libxslt
+mingw-postgresql
 mingw-curl
-
-# Tier-2
-geos
-armadillo
-freexl
+proj
 libgeotiff
-libkml
-liblerc
-hdf
-hdf5
-
-
-netcdf <- blosc
-       <- hdf
-       <- hdf5
-
-libspatialite <- geos
-              <- freexl
-              <- proj

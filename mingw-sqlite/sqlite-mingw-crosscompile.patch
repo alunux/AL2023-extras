@@ -1,0 +1,20 @@
+--- configure.ac.cc	2016-02-18 11:42:35.868255721 +0100
++++ configure.ac	2016-02-18 11:42:35.889255260 +0100
+@@ -259,16 +259,7 @@
+ if test "$CYGWIN" != "yes"; then
+   AC_CYGWIN
+ fi
+-if test "$CYGWIN" = "yes"; then
+-  BUILD_EXEEXT=.exe
+-else
+-  BUILD_EXEEXT=$EXEEXT
+-fi
+-if test x"$cross_compiling" = xno; then
+-  TARGET_EXEEXT=$BUILD_EXEEXT
+-else
+-  TARGET_EXEEXT=$config_TARGET_EXEEXT
+-fi
++TARGET_EXEEXT=$EXEEXT
+ if test "$TARGET_EXEEXT" = ".exe"; then
+   SQLITE_OS_UNIX=0
+   SQLITE_OS_WIN=1

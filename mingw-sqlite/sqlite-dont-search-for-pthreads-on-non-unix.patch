@@ -1,0 +1,11 @@
+--- configure.ac.pthread	2016-02-18 11:40:40.177797402 +0100
++++ configure.ac	2016-02-18 11:41:34.232609836 +0100
+@@ -193,7 +193,7 @@
+ fi
+ AC_SUBST(SQLITE_THREADSAFE)
+ 
+-if test "$SQLITE_THREADSAFE" = "1"; then
++if test "$SQLITE_THREADSAFE" = "1" -a "$SQLITE_OS_UNIX" = "1" ; then
+   AC_SEARCH_LIBS(pthread_create, pthread)
+   AC_SEARCH_LIBS(pthread_mutexattr_init, pthread)
+ fi

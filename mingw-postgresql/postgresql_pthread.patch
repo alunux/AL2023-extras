@@ -1,0 +1,85 @@
+diff -rupN --no-dereference postgresql-15.3/src/interfaces/ecpg/ecpglib/misc.c postgresql-15.3-new/src/interfaces/ecpg/ecpglib/misc.c
+--- postgresql-15.3/src/interfaces/ecpg/ecpglib/misc.c	2023-05-08 23:13:20.000000000 +0200
++++ postgresql-15.3-new/src/interfaces/ecpg/ecpglib/misc.c	2023-06-15 09:16:39.853955168 +0200
+@@ -450,7 +450,7 @@ ECPGis_noind_null(enum ECPGttype type, c
+ 	return false;
+ }
+ 
+-#ifdef WIN32
++#ifdef _MSC_VER
+ #ifdef ENABLE_THREAD_SAFETY
+ 
+ void
+diff -rupN --no-dereference postgresql-15.3/src/interfaces/ecpg/include/ecpg-pthread-win32.h postgresql-15.3-new/src/interfaces/ecpg/include/ecpg-pthread-win32.h
+--- postgresql-15.3/src/interfaces/ecpg/include/ecpg-pthread-win32.h	2023-05-08 23:13:20.000000000 +0200
++++ postgresql-15.3-new/src/interfaces/ecpg/include/ecpg-pthread-win32.h	2023-06-15 09:16:39.853955168 +0200
+@@ -7,7 +7,7 @@
+ 
+ #ifdef ENABLE_THREAD_SAFETY
+ 
+-#ifndef WIN32
++#ifndef _MSC_VER
+ 
+ #include <pthread.h>
+ #else
+diff -rupN --no-dereference postgresql-15.3/src/interfaces/libpq/fe-connect.c postgresql-15.3-new/src/interfaces/libpq/fe-connect.c
+--- postgresql-15.3/src/interfaces/libpq/fe-connect.c	2023-05-08 23:13:20.000000000 +0200
++++ postgresql-15.3-new/src/interfaces/libpq/fe-connect.c	2023-06-15 09:16:39.855955196 +0200
+@@ -56,7 +56,7 @@
+ #endif
+ 
+ #ifdef ENABLE_THREAD_SAFETY
+-#ifdef WIN32
++#ifdef _MSC_VER
+ #include "pthread-win32.h"
+ #else
+ #include <pthread.h>
+diff -rupN --no-dereference postgresql-15.3/src/interfaces/libpq/fe-secure.c postgresql-15.3-new/src/interfaces/libpq/fe-secure.c
+--- postgresql-15.3/src/interfaces/libpq/fe-secure.c	2023-05-08 23:13:20.000000000 +0200
++++ postgresql-15.3-new/src/interfaces/libpq/fe-secure.c	2023-06-15 09:16:39.855955196 +0200
+@@ -38,7 +38,7 @@
+ #include <sys/stat.h>
+ 
+ #ifdef ENABLE_THREAD_SAFETY
+-#ifdef WIN32
++#ifdef _MSC_VER
+ #include "pthread-win32.h"
+ #else
+ #include <pthread.h>
+diff -rupN --no-dereference postgresql-15.3/src/interfaces/libpq/fe-secure-openssl.c postgresql-15.3-new/src/interfaces/libpq/fe-secure-openssl.c
+--- postgresql-15.3/src/interfaces/libpq/fe-secure-openssl.c	2023-05-08 23:13:20.000000000 +0200
++++ postgresql-15.3-new/src/interfaces/libpq/fe-secure-openssl.c	2023-06-15 09:16:39.856955210 +0200
+@@ -47,7 +47,7 @@
+ #include <sys/stat.h>
+ 
+ #ifdef ENABLE_THREAD_SAFETY
+-#ifdef WIN32
++#ifdef _MSC_VER
+ #include "pthread-win32.h"
+ #else
+ #include <pthread.h>
+diff -rupN --no-dereference postgresql-15.3/src/interfaces/libpq/libpq-int.h postgresql-15.3-new/src/interfaces/libpq/libpq-int.h
+--- postgresql-15.3/src/interfaces/libpq/libpq-int.h	2023-05-08 23:13:20.000000000 +0200
++++ postgresql-15.3-new/src/interfaces/libpq/libpq-int.h	2023-06-15 09:16:39.856955210 +0200
+@@ -29,7 +29,7 @@
+ #endif
+ 
+ #ifdef ENABLE_THREAD_SAFETY
+-#ifdef WIN32
++#ifdef _MSC_VER
+ #include "pthread-win32.h"
+ #else
+ #include <pthread.h>
+diff -rupN --no-dereference postgresql-15.3/src/interfaces/libpq/Makefile postgresql-15.3-new/src/interfaces/libpq/Makefile
+--- postgresql-15.3/src/interfaces/libpq/Makefile	2023-05-08 23:13:20.000000000 +0200
++++ postgresql-15.3-new/src/interfaces/libpq/Makefile	2023-06-15 09:16:39.856955210 +0200
+@@ -71,9 +71,6 @@ ifeq ($(PORTNAME), win32)
+ OBJS += \
+ 	win32.o
+ 
+-ifeq ($(enable_thread_safety), yes)
+-OBJS += pthread-win32.o
+-endif
+ endif
+ 
+ 
