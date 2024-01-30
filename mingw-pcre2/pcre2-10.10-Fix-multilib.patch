@@ -1,0 +1,23 @@
+diff -rupN --no-dereference pcre2-10.42/pcre2-config.in pcre2-10.42-new/pcre2-config.in
+--- pcre2-10.42/pcre2-config.in	2021-08-20 18:51:28.000000000 +0200
++++ pcre2-10.42-new/pcre2-config.in	2023-01-13 21:29:23.154297931 +0100
+@@ -28,19 +28,7 @@ if test $# -eq 0; then
+ fi
+ 
+ libR=
+-case `uname -s` in
+-  *SunOS*)
+-  libR=" -R@libdir@"
+-  ;;
+-  *BSD*)
+-  libR=" -Wl,-R@libdir@"
+-  ;;
+-esac
+-
+ libS=
+-if test @libdir@ != /usr/lib ; then
+-  libS=-L@libdir@
+-fi
+ 
+ while test $# -gt 0; do
+   case "$1" in

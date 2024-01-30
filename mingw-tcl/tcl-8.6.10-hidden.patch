@@ -1,0 +1,33 @@
+diff -rupN --no-dereference tcl8.6.12/generic/tclInt.h tcl8.6.12-new/generic/tclInt.h
+--- tcl8.6.12/generic/tclInt.h	2021-10-29 19:08:07.000000000 +0200
++++ tcl8.6.12-new/generic/tclInt.h	2021-11-22 11:25:30.996284390 +0100
+@@ -3309,7 +3309,7 @@ MODULE_SCOPE void	TclClockInit(Tcl_Inter
+ MODULE_SCOPE int	TclClockOldscanObjCmd(
+ 			    ClientData clientData, Tcl_Interp *interp,
+ 			    int objc, Tcl_Obj *const objv[]);
+-MODULE_SCOPE int	Tcl_CloseObjCmd(ClientData clientData,
++extern int	Tcl_CloseObjCmd(ClientData clientData,
+ 			    Tcl_Interp *interp, int objc,
+ 			    Tcl_Obj *const objv[]);
+ MODULE_SCOPE int	Tcl_ConcatObjCmd(ClientData clientData,
+@@ -3490,7 +3490,7 @@ MODULE_SCOPE int	Tcl_RenameObjCmd(Client
+ MODULE_SCOPE int	Tcl_RepresentationCmd(ClientData clientData,
+ 			    Tcl_Interp *interp, int objc,
+ 			    Tcl_Obj *const objv[]);
+-MODULE_SCOPE int	Tcl_ReturnObjCmd(ClientData clientData,
++extern int	Tcl_ReturnObjCmd(ClientData clientData,
+ 			    Tcl_Interp *interp, int objc,
+ 			    Tcl_Obj *const objv[]);
+ MODULE_SCOPE int	Tcl_ScanObjCmd(ClientData clientData,
+diff -rupN --no-dereference tcl8.6.12/generic/tclPort.h tcl8.6.12-new/generic/tclPort.h
+--- tcl8.6.12/generic/tclPort.h	2021-10-29 19:08:07.000000000 +0200
++++ tcl8.6.12-new/generic/tclPort.h	2021-11-22 11:25:30.997284394 +0100
+@@ -20,7 +20,7 @@
+ #if defined(_WIN32)
+ #   include "tclWinPort.h"
+ #else
+-#   include "tclUnixPort.h"
++#   include "../unix/tclUnixPort.h"
+ #endif
+ #include "tcl.h"
+ 

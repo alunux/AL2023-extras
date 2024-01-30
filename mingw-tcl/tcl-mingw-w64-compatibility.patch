@@ -1,0 +1,21 @@
+diff -rupN --no-dereference tcl8.6.12/generic/tclPosixStr.c tcl8.6.12-new/generic/tclPosixStr.c
+--- tcl8.6.12/generic/tclPosixStr.c	2021-10-29 19:08:07.000000000 +0200
++++ tcl8.6.12-new/generic/tclPosixStr.c	2021-11-22 11:25:31.411286133 +0100
+@@ -347,7 +347,7 @@ Tcl_ErrnoId(void)
+ #ifdef EOTHER
+     case EOTHER: return "EOTHER";
+ #endif
+-#if defined(EOVERFLOW) && (!defined(EFBIG) || (EOVERFLOW != EFBIG)) && (!defined(EINVAL) || (EOVERFLOW != EINVAL))
++#if defined(EOVERFLOW) && (!defined(EFBIG) || (EOVERFLOW != EFBIG)) && (!defined(EINVAL) || (EOVERFLOW != EINVAL)) && !defined(E2BIG)
+     case EOVERFLOW: return "EOVERFLOW";
+ #endif
+ #ifdef EOWNERDEAD
+@@ -810,7 +810,7 @@ Tcl_ErrnoMsg(
+ #ifdef EOTHER
+     case EOTHER: return "other error";
+ #endif
+-#if defined(EOVERFLOW) && (!defined(EFBIG) || (EOVERFLOW != EFBIG)) && (!defined(EINVAL) || (EOVERFLOW != EINVAL))
++#if defined(EOVERFLOW) && (!defined(EFBIG) || (EOVERFLOW != EFBIG)) && (!defined(EINVAL) || (EOVERFLOW != EINVAL)) && !defined(E2BIG)
+     case EOVERFLOW: return "file too big";
+ #endif
+ #ifdef EOWNERDEAD

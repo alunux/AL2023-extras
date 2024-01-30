@@ -1,0 +1,56 @@
+diff -rupN --no-dereference openssl-3.0.9/apps/CA.pl.in openssl-3.0.9-new/apps/CA.pl.in
+--- openssl-3.0.9/apps/CA.pl.in	2023-05-30 14:31:57.000000000 +0200
++++ openssl-3.0.9-new/apps/CA.pl.in	2023-05-31 16:36:51.078280742 +0200
+@@ -29,7 +29,7 @@ my $X509 = "$openssl x509";
+ my $PKCS12 = "$openssl pkcs12";
+ 
+ # Default values for various configuration settings.
+-my $CATOP = "./demoCA";
++my $CATOP = "/etc/pki/CA";
+ my $CAKEY = "cakey.pem";
+ my $CAREQ = "careq.pem";
+ my $CACERT = "cacert.pem";
+diff -rupN --no-dereference openssl-3.0.9/apps/openssl.cnf openssl-3.0.9-new/apps/openssl.cnf
+--- openssl-3.0.9/apps/openssl.cnf	2023-05-31 16:36:50.830281468 +0200
++++ openssl-3.0.9-new/apps/openssl.cnf	2023-05-31 16:36:51.078280742 +0200
+@@ -52,6 +52,8 @@ tsa_policy3 = 1.2.3.4.5.7
+ 
+ [openssl_init]
+ providers = provider_sect
++# Load default TLS policy configuration
++ssl_conf = ssl_module
+ 
+ # List of providers to load
+ [provider_sect]
+@@ -71,6 +73,13 @@ default = default_sect
+ [default_sect]
+ # activate = 1
+ 
++[ ssl_module ]
++
++system_default = crypto_policy
++
++[ crypto_policy ]
++
++.include = /etc/crypto-policies/back-ends/opensslcnf.config
+ 
+ ####################################################################
+ [ ca ]
+@@ -79,7 +88,7 @@ default_ca	= CA_default		# The default c
+ ####################################################################
+ [ CA_default ]
+ 
+-dir		= ./demoCA		# Where everything is kept
++dir		= /etc/pki/CA		# Where everything is kept
+ certs		= $dir/certs		# Where the issued certs are kept
+ crl_dir		= $dir/crl		# Where the issued crl are kept
+ database	= $dir/index.txt	# database index file.
+@@ -311,7 +320,7 @@ default_tsa = tsa_config1	# the default
+ [ tsa_config1 ]
+ 
+ # These are used by the TSA reply generation only.
+-dir		= ./demoCA		# TSA root directory
++dir		= /etc/pki/CA		# TSA root directory
+ serial		= $dir/tsaserial	# The current serial number (mandatory)
+ crypto_device	= builtin		# OpenSSL engine to use for signing
+ signer_cert	= $dir/tsacert.pem 	# The TSA signing certificate

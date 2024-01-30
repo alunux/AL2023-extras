@@ -1,0 +1,70 @@
+diff -rupN --no-dereference openssl-3.0.9/include/openssl/crypto.h.in openssl-3.0.9-new/include/openssl/crypto.h.in
+--- openssl-3.0.9/include/openssl/crypto.h.in	2023-05-30 14:31:57.000000000 +0200
++++ openssl-3.0.9-new/include/openssl/crypto.h.in	2023-05-31 16:36:52.081277805 +0200
+@@ -38,6 +38,7 @@ use OpenSSL::stackhash qw(generate_stack
+ # include <openssl/opensslconf.h>
+ # include <openssl/cryptoerr.h>
+ # include <openssl/core.h>
++# include <openssl/fips.h>
+ 
+ # ifdef CHARSET_EBCDIC
+ #  include <openssl/ebcdic.h>
+diff -rupN --no-dereference openssl-3.0.9/include/openssl/fips.h openssl-3.0.9-new/include/openssl/fips.h
+--- openssl-3.0.9/include/openssl/fips.h	1970-01-01 01:00:00.000000000 +0100
++++ openssl-3.0.9-new/include/openssl/fips.h	2023-05-31 16:36:52.081277805 +0200
+@@ -0,0 +1,25 @@
++/*
++ * Copyright 2016-2020 The OpenSSL Project Authors. All Rights Reserved.
++ *
++ * Licensed under the Apache License 2.0 (the "License").  You may not use
++ * this file except in compliance with the License.  You can obtain a copy
++ * in the file LICENSE in the source distribution or at
++ * https://www.openssl.org/source/license.html
++ */
++
++#ifndef OPENSSL_FIPS_H
++# define OPENSSL_FIPS_H
++# pragma once
++
++# include <openssl/macros.h>
++
++# ifdef __cplusplus
++extern "C" {
++# endif
++
++# define FIPS_mode() EVP_default_properties_is_fips_enabled(NULL)
++
++# ifdef __cplusplus
++}
++# endif
++#endif
+diff -rupN --no-dereference openssl-3.0.9/test/property_test.c openssl-3.0.9-new/test/property_test.c
+--- openssl-3.0.9/test/property_test.c	2023-05-30 14:31:57.000000000 +0200
++++ openssl-3.0.9-new/test/property_test.c	2023-05-31 16:36:52.082277802 +0200
+@@ -648,6 +648,18 @@ static int test_property_list_to_string(
+     return ret;
+ }
+ 
++static int test_downstream_FIPS_mode(void)
++{
++    int ret = 0;
++
++    ret = TEST_true(EVP_set_default_properties(NULL, "fips=yes"))
++          && TEST_true(FIPS_mode())
++          && TEST_true(EVP_set_default_properties(NULL, "fips=no"))
++          && TEST_false(FIPS_mode());
++
++    return ret;
++}
++
+ int setup_tests(void)
+ {
+     ADD_TEST(test_property_string);
+@@ -661,6 +673,7 @@ int setup_tests(void)
+     ADD_TEST(test_property);
+     ADD_TEST(test_query_cache_stochastic);
+     ADD_TEST(test_fips_mode);
++    ADD_TEST(test_downstream_FIPS_mode);
+     ADD_ALL_TESTS(test_property_list_to_string, OSSL_NELEM(to_string_tests));
+     return 1;
+ }

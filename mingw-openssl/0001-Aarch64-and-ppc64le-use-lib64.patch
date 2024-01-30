@@ -1,0 +1,19 @@
+diff -rupN --no-dereference openssl-3.0.9/Configurations/10-main.conf openssl-3.0.9-new/Configurations/10-main.conf
+--- openssl-3.0.9/Configurations/10-main.conf	2023-05-30 14:31:57.000000000 +0200
++++ openssl-3.0.9-new/Configurations/10-main.conf	2023-05-31 16:36:50.335282918 +0200
+@@ -730,6 +730,7 @@ my %targets = (
+         lib_cppflags     => add("-DL_ENDIAN"),
+         asm_arch         => 'ppc64',
+         perlasm_scheme   => "linux64le",
++        multilib         => "64",
+     },
+ 
+     "linux-armv4" => {
+@@ -772,6 +773,7 @@ my %targets = (
+         inherit_from     => [ "linux-generic64" ],
+         asm_arch         => 'aarch64',
+         perlasm_scheme   => "linux64",
++        multilib         => "64",
+     },
+     "linux-arm64ilp32" => {  # https://wiki.linaro.org/Platform/arm64-ilp32
+         inherit_from     => [ "linux-generic32" ],

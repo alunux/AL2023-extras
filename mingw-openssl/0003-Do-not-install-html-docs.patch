@@ -1,0 +1,12 @@
+diff -rupN --no-dereference openssl-3.0.9/Configurations/unix-Makefile.tmpl openssl-3.0.9-new/Configurations/unix-Makefile.tmpl
+--- openssl-3.0.9/Configurations/unix-Makefile.tmpl	2023-05-30 14:31:57.000000000 +0200
++++ openssl-3.0.9-new/Configurations/unix-Makefile.tmpl	2023-05-31 16:36:50.836281451 +0200
+@@ -611,7 +611,7 @@ install_sw: install_dev install_engines
+ 
+ uninstall_sw: uninstall_runtime uninstall_modules uninstall_engines uninstall_dev
+ 
+-install_docs: install_man_docs install_html_docs
++install_docs: install_man_docs
+ 
+ uninstall_docs: uninstall_man_docs uninstall_html_docs
+ 	$(RM) -r $(DESTDIR)$(DOCDIR)

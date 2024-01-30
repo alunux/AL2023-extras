@@ -1,0 +1,44 @@
+diff -rupN --no-dereference tcl8.6.12/library/auto.tcl tcl8.6.12-new/library/auto.tcl
+--- tcl8.6.12/library/auto.tcl	2021-10-29 19:08:07.000000000 +0200
++++ tcl8.6.12-new/library/auto.tcl	2021-11-22 11:25:30.793283539 +0100
+@@ -81,6 +81,13 @@ proc tcl_findLibrary {basename version p
+ 	    lappend dirs [::${basename}::pkgconfig get scriptdir,runtime]
+ 	}
+ 
++	# 2a. As a sibling of Tcl's script directory
++	if {[catch {
++	    ::tcl::pkgconfig get scriptdir,runtime
++	} value] == 0} {
++	    lappend dirs [file join [file dirname $value] $basename$version]
++	}
++
+ 	# 3. Relative to auto_path directories.  This checks relative to the
+ 	# Tcl library as well as allowing loading of libraries added to the
+ 	# auto_path that is not relative to the core library or binary paths.
+diff -rupN --no-dereference tcl8.6.12/library/init.tcl tcl8.6.12-new/library/init.tcl
+--- tcl8.6.12/library/init.tcl	2021-10-29 19:08:07.000000000 +0200
++++ tcl8.6.12-new/library/init.tcl	2021-11-22 11:25:30.793283539 +0100
+@@ -52,7 +52,7 @@ if {![info exists auto_path]} {
+ namespace eval tcl {
+     if {![interp issafe]} {
+ 	variable Dir
+-	foreach Dir [list $::tcl_library [file dirname $::tcl_library]] {
++        foreach Dir [list $::tcl_library] {
+ 	    if {$Dir ni $::auto_path} {
+ 		lappend ::auto_path $Dir
+ 	    }
+diff -rupN --no-dereference tcl8.6.12/unix/configure.in tcl8.6.12-new/unix/configure.in
+--- tcl8.6.12/unix/configure.in	2021-10-29 19:08:08.000000000 +0200
++++ tcl8.6.12-new/unix/configure.in	2021-11-22 11:25:30.793283539 +0100
+@@ -866,9 +866,9 @@ if test "$FRAMEWORK_BUILD" = "1" ; then
+     test -z "$TCL_MODULE_PATH"  && \
+ 	TCL_MODULE_PATH="~/Library/Tcl /Library/Tcl"
+ elif test "$prefix/lib" != "$libdir"; then
+-    test -z "$TCL_PACKAGE_PATH" && TCL_PACKAGE_PATH="{${libdir}} {${prefix}/lib} ${TCL_PACKAGE_PATH}"
++    test -z "$TCL_PACKAGE_PATH" && TCL_PACKAGE_PATH="${libdir}/tcl8.6 ${prefix}/share/tcl8.6 ${libdir}/tk8.6 ${prefix}/share/tk8.6 ${TCL_PACKAGE_PATH}"
+ else
+-    test -z "$TCL_PACKAGE_PATH" && TCL_PACKAGE_PATH="{${prefix}/lib} ${TCL_PACKAGE_PATH}"
++    test -z "$TCL_PACKAGE_PATH" && TCL_PACKAGE_PATH="${libdir}/tcl8.6 ${prefix}/share/tcl8.6 ${libdir}/tk8.6 ${prefix}/share/tk8.6 ${TCL_PACKAGE_PATH}"
+ fi
+ 
+ #--------------------------------------------------------------------

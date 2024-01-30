@@ -1,0 +1,13 @@
+diff -rupN --no-dereference tcl8.6.12/win/configure.in tcl8.6.12-new/win/configure.in
+--- tcl8.6.12/win/configure.in	2021-11-22 11:25:31.297285654 +0100
++++ tcl8.6.12-new/win/configure.in	2021-11-22 11:25:31.524286608 +0100
+@@ -163,6 +163,9 @@ AS_IF([test "$tcl_ok" = "yes"], [
+ ], [
+   AC_SUBST(ZLIB_OBJS,[\${ZLIB_OBJS}])
+ ])
++AC_SUBST(ZLIB_DLL_FILE,[])
++AC_SUBST(ZLIB_OBJS,[])
++AC_SUBST(ZLIB_LIBS,[-lz])
+ AC_DEFINE(HAVE_ZLIB, 1, [Is there an installed zlib?])
+ 
+ AC_CHECK_TYPE([intptr_t], [

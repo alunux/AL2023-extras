@@ -7,6 +7,7 @@ cfitsio
 minizip-ng
 libdap
 libgta
+libjpeg-turbo
 ogdi
 xerces-c
 
@@ -26,14 +27,39 @@ mingw-zlib
 mingw-gmp
 mingw-win-iconv
 mingw-gdb
+mingw-pcre2
+mingw-tcl
+mingw-imath
+mingw-openexr
+liblerc
+mingw-libjpeg-turbo
+mingw-libpng
+mingw-libtiff
+giflib
+libwebp
+mingw-lcms2
+openjpeg2
+mingw-termcap
+mingw-readline
 mingw-libcharset
 mingw-zstd
 mingw-xz
 mingw-bzip2
+mingw-dlfcn
+mingw-libidn2
+mingw-openssl
+mingw-libssh2
 mingw-minizip
+mingw-gettext
+mingw-libgpg-error
+mingw-libgcrypt
+mingw-libxml2
+mingw-libxslt
+mingw-curl
 
 # Tier-2
 geos
+armadillo
 freexl
 libgeotiff
 libkml
@@ -41,11 +67,6 @@ liblerc
 hdf
 hdf5
 
-# Tier-3
-armadillo 
-    <- CharLS
-    <- arpack
-    <- hdf5
 
 netcdf <- blosc
        <- hdf

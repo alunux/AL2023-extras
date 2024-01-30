@@ -1,0 +1,12 @@
+diff -rupN --no-dereference pcre2-10.42/src/pcre2grep.c pcre2-10.42-new/src/pcre2grep.c
+--- pcre2-10.42/src/pcre2grep.c	2022-12-06 16:30:03.000000000 +0100
++++ pcre2-10.42-new/src/pcre2grep.c	2023-01-13 21:29:23.197298104 +0100
+@@ -841,7 +841,7 @@ native z/OS, and "no support". */
+ 
+ /************* Directory scanning Unix-style and z/OS ***********/
+ 
+-#if (defined HAVE_SYS_STAT_H && defined HAVE_DIRENT_H && defined HAVE_SYS_TYPES_H) || defined NATIVE_ZOS
++#if ((defined HAVE_SYS_STAT_H && defined HAVE_DIRENT_H && defined HAVE_SYS_TYPES_H) || defined NATIVE_ZOS) && !defined WIN32
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <dirent.h>
