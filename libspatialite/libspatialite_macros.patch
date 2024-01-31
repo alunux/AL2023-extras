@@ -1,0 +1,12 @@
+diff -rupN --no-dereference libspatialite-5.0.1/configure.ac libspatialite-5.0.1-new/configure.ac
+--- libspatialite-5.0.1/configure.ac	2023-08-04 11:21:26.379799467 +0200
++++ libspatialite-5.0.1-new/configure.ac	2023-08-04 11:21:26.385797830 +0200
+@@ -96,7 +96,7 @@ AC_PROG_INSTALL
+ AC_PROG_LN_S
+ AC_PROG_MAKE_SET
+ AC_LIBTOOL_WIN32_DLL
+-AC_PROG_LIBTOOL
++LT_INIT
+ 
+ # Checks for typedefs, structures, and compiler characteristics.
+ AC_C_CONST

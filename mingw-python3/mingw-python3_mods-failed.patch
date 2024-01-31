@@ -1,0 +1,12 @@
+diff -rupN --no-dereference Python-3.11.6/setup.py Python-3.11.6-new/setup.py
+--- Python-3.11.6/setup.py	2023-10-02 15:29:10.000000000 +0200
++++ Python-3.11.6-new/setup.py	2023-10-08 11:36:32.664164444 +0200
+@@ -576,6 +576,8 @@ class PyBuildExt(build_ext):
+             print("Failed to build these modules:")
+             print_three_column(failed)
+             print()
++            with open('mods_failed.txt', 'w') as fh:
++                fh.write(", ".join(failed) + "\n")
+ 
+         if self.failed_on_import:
+             failed = self.failed_on_import[:]

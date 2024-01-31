@@ -30,12 +30,15 @@ mingw-gdb
 
 # Tier-2
 geos
+librttopo
 hdf
 hdf5
 netcdf
 armadillo
+mingw-libffi
 mingw-pcre2
 mingw-tcl
+mingw-tk
 mingw-pdcurses
 mingw-xerces-c
 mingw-imath
@@ -70,3 +73,7 @@ mingw-postgresql
 mingw-curl
 proj
 libgeotiff
+libspatialite
+
+# Tier-3
+mingw-python3
