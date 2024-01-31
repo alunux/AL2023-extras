@@ -1,0 +1,140 @@
+diff -rupN --no-dereference setuptools-67.7.2/setuptools/_distutils/ccompiler.py setuptools-67.7.2-new/setuptools/_distutils/ccompiler.py
+--- setuptools-67.7.2/setuptools/_distutils/ccompiler.py	2023-04-24 13:36:34.000000000 +0200
++++ setuptools-67.7.2-new/setuptools/_distutils/ccompiler.py	2023-04-25 11:40:46.258575178 +0200
+@@ -19,7 +19,7 @@ from .spawn import spawn
+ from .file_util import move_file
+ from .dir_util import mkpath
+ from .dep_util import newer_group
+-from .util import split_quoted, execute
++from .util import split_quoted, execute, get_platform
+ from ._log import log
+ 
+ 
+@@ -1076,6 +1076,8 @@ def get_default_compiler(osname=None, pl
+         osname = os.name
+     if platform is None:
+         platform = sys.platform
++    if get_platform().startswith('mingw'):
++        return 'mingw32'
+     for pattern, compiler in _default_compilers:
+         if (
+             re.match(pattern, platform) is not None
+@@ -1141,6 +1143,9 @@ def new_compiler(plat=None, compiler=Non
+         if compiler is None:
+             compiler = get_default_compiler(plat)
+ 
++        if "mingw32" in os.environ.get("CC", ""):
++            compiler = "mingw32"
++
+         (module_name, class_name, long_description) = compiler_class[compiler]
+     except KeyError:
+         msg = "don't know how to compile C/C++ code on platform '%s'" % plat
+diff -rupN --no-dereference setuptools-67.7.2/setuptools/_distutils/command/build_ext.py setuptools-67.7.2-new/setuptools/_distutils/command/build_ext.py
+--- setuptools-67.7.2/setuptools/_distutils/command/build_ext.py	2023-04-24 13:36:34.000000000 +0200
++++ setuptools-67.7.2-new/setuptools/_distutils/command/build_ext.py	2023-04-25 11:40:46.258575178 +0200
+@@ -189,7 +189,7 @@ class build_ext(Command):
+         # for extensions under windows use different directories
+         # for Release and Debug builds.
+         # also Python's library directory must be appended to library_dirs
+-        if os.name == 'nt':
++        if os.name == 'nt' and not self.plat_name.startswith(('mingw')):
+             # the 'libs' directory is for binary installs - we assume that
+             # must be the *native* platform.  But we don't really support
+             # cross-compiling via a binary install anyway, so we let it go.
+@@ -742,6 +742,20 @@ class build_ext(Command):
+         # pyconfig.h that MSVC groks.  The other Windows compilers all seem
+         # to need it mentioned explicitly, though, so that's what we do.
+         # Append '_d' to the python import library on debug builds.
++
++        # Use self.plat_name as it works even in case of
++        # cross-compilation (at least for mingw build).
++        if self.plat_name.startswith('mingw'):
++            from distutils import sysconfig
++            extra = []
++            for lib in (
++                sysconfig.get_config_var('BLDLIBRARY').split()
++                + sysconfig.get_config_var('SHLIBS').split()
++                ):
++                if lib.startswith('-l'):
++                    extra.append(lib[2:])
++            return ext.libraries + extra
++
+         if sys.platform == "win32":
+             from .._msvccompiler import MSVCCompiler
+ 
+@@ -778,7 +792,7 @@ class build_ext(Command):
+                     # We are cross-compiling for one of the relevant platforms
+                     if get_config_var('ANDROID_API_LEVEL') != 0:
+                         link_libpython = True
+-                    elif get_config_var('MACHDEP') == 'cygwin':
++                    elif get_config_var('MACHDEP') == 'cygwin' or get_config_var('MACHDEP') == 'win32':
+                         link_libpython = True
+ 
+             if link_libpython:
+diff -rupN --no-dereference setuptools-67.7.2/setuptools/_distutils/cygwinccompiler.py setuptools-67.7.2-new/setuptools/_distutils/cygwinccompiler.py
+--- setuptools-67.7.2/setuptools/_distutils/cygwinccompiler.py	2023-04-24 13:36:34.000000000 +0200
++++ setuptools-67.7.2-new/setuptools/_distutils/cygwinccompiler.py	2023-04-25 11:40:46.258575178 +0200
+@@ -113,7 +113,7 @@ class CygwinCCompiler(UnixCCompiler):
+ 
+         # Include the appropriate MSVC runtime library if Python was built
+         # with MSVC 7.0 or later.
+-        self.dll_libraries = get_msvcr()
++        self.dll_libraries = get_msvcr() or []
+ 
+     @property
+     def gcc_version(self):
+@@ -216,8 +216,9 @@ class CygwinCCompiler(UnixCCompiler):
+         # (On my machine: 10KiB < stripped_file < ??100KiB
+         #   unstripped_file = stripped_file + XXX KiB
+         #  ( XXX=254 for a typical python extension))
+-        if not debug:
+-            extra_preargs.append("-s")
++        # => Let mingw-find-debuginfo.sh strip the binaries
++        # if not debug:
++        #     extra_preargs.append("-s")
+ 
+         UnixCCompiler.link(
+             self,
+@@ -284,7 +285,7 @@ class Mingw32CCompiler(CygwinCCompiler):
+         )
+ 
+     def runtime_library_dir_option(self, dir):
+-        raise DistutilsPlatformError(_runtime_library_dirs_msg)
++        return "-L" + dir
+ 
+ 
+ # Because these compilers aren't configured in Python's pyconfig.h file by
+diff -rupN --no-dereference setuptools-67.7.2/setuptools/_distutils/sysconfig.py setuptools-67.7.2-new/setuptools/_distutils/sysconfig.py
+--- setuptools-67.7.2/setuptools/_distutils/sysconfig.py	2023-04-24 13:36:34.000000000 +0200
++++ setuptools-67.7.2-new/setuptools/_distutils/sysconfig.py	2023-04-25 11:40:46.259575030 +0200
+@@ -273,7 +273,7 @@ def customize_compiler(compiler):  # noq
+     Mainly needed on Unix, so we can plug in the information that
+     varies across Unices and is stored in Python's Makefile.
+     """
+-    if compiler.compiler_type == "unix":
++    if compiler.compiler_type in ["unix", "cygwin", "mingw32"]:
+         if sys.platform == "darwin":
+             # Perform first-time customization of compiler-related
+             # config vars on OS X now that we know we need a compiler.
+@@ -356,7 +356,8 @@ def customize_compiler(compiler):  # noq
+         if 'RANLIB' in os.environ and compiler.executables.get('ranlib', None):
+             compiler.set_executables(ranlib=os.environ['RANLIB'])
+ 
+-        compiler.shared_lib_extension = shlib_suffix
++        # Don't override value but use what is set in derived compiler class itself
++        # compiler.shared_lib_extension = shlib_suffix
+ 
+ 
+ def get_config_h_filename():
+diff -rupN --no-dereference setuptools-67.7.2/setuptools/_distutils/util.py setuptools-67.7.2-new/setuptools/_distutils/util.py
+--- setuptools-67.7.2/setuptools/_distutils/util.py	2023-04-24 13:36:34.000000000 +0200
++++ setuptools-67.7.2-new/setuptools/_distutils/util.py	2023-04-25 11:40:46.259575030 +0200
+@@ -32,6 +32,8 @@ def get_host_platform():
+ 
+     if sys.version_info < (3, 8):
+         if os.name == 'nt':
++            if 'GCC' in sys.version:
++                return 'mingw'
+             if '(arm)' in sys.version.lower():
+                 return 'win-arm32'
+             if '(arm64)' in sys.version.lower():

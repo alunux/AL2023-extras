@@ -1,0 +1,13 @@
+diff -rupN --no-dereference wheel-0.40.0/src/wheel/vendored/packaging/tags.py wheel-0.40.0-new/src/wheel/vendored/packaging/tags.py
+--- wheel-0.40.0/src/wheel/vendored/packaging/tags.py	2023-03-14 16:09:51.758340400 +0100
++++ wheel-0.40.0-new/src/wheel/vendored/packaging/tags.py	2023-03-28 17:20:31.136720378 +0200
+@@ -469,6 +469,9 @@ def mac_platforms(
+ 
+ def _linux_platforms(is_32bit: bool = _32_BIT_INTERPRETER) -> Iterator[str]:
+     linux = _normalize_string(sysconfig.get_platform())
++    if linux.startswith("mingw"):
++        yield linux
++        return
+     if is_32bit:
+         if linux == "linux_x86_64":
+             linux = "linux_i686"

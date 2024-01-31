@@ -1,0 +1,12 @@
+diff -rupN --no-dereference setuptools-67.7.2/setuptools/monkey.py setuptools-67.7.2-new/setuptools/monkey.py
+--- setuptools-67.7.2/setuptools/monkey.py	2023-04-24 13:36:34.000000000 +0200
++++ setuptools-67.7.2-new/setuptools/monkey.py	2023-04-25 11:40:46.217581228 +0200
+@@ -94,7 +94,7 @@ def patch_all():
+             setuptools.extension.Extension
+         )
+ 
+-    patch_for_msvc_specialized_compiler()
++    # patch_for_msvc_specialized_compiler()
+ 
+ 
+ def _patch_distribution_metadata():

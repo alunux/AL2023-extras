@@ -77,3 +77,16 @@ libspatialite
 
 # Tier-3
 mingw-python3
+mingw-python-setuptools 
+mingw-python-wheel
+mingw-python-flit-core
+mingw-python-pep517 (bootstrap)
+mingw-python-pyparsing (bootstrap)
+mingw-python-build (bootstrap)
+mingw-python-installer (boostrap)
+mingw-python-pyproject-hooks (bootstrap)
+mingw-python-pep517
+mingw-python-packaging
+mingw-python-pyparsing
+mingw-python-installer
+mingw-python-pyproject-hooks
